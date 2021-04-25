@@ -19,8 +19,7 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().write("<html><h2><a href=\"index.jsp\">Try again!</a><h2><html>");
-        resp.getWriter().flush();
+        doPost(req,resp);
     }
 
     @Override
@@ -37,23 +36,21 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
                 req.getParameter("price"),
                 session.getId());
 
-        logger.info("POST. Adding new list position to DB");
-
-
-
-//        resp.getWriter().write(session.getId());
-//        resp.getWriter().flush();
+        logger.info("POST. Adding new list position to DB, session id #" + session.getId());
 
         getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        logger.info("Starting session# " + se.getSession().getId());
+        logger.info("Starting session #" + se.getSession().getId());
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         logger.info("Destroying session #" + se.getSession().getId());
+        ShoppingListDao dao = new ShoppingListDaoImpl();
+        dao.deleteAllSessionPurchases(se.getSession().getId());
+        logger.info("All purchases from session #" + se.getSession().getId() + " was deleted from BD");
     }
 }

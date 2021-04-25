@@ -26,7 +26,7 @@
         <th>Итого:</th>
     </tr>
     <%
-        List<ShoppingList> allPurchases = dao.getAllPurchases();
+        List<ShoppingList> allPurchases = dao.getAllPurchases(request.getRequestedSessionId());
         for (ShoppingList purchase : allPurchases) {
     %>
     <tr>

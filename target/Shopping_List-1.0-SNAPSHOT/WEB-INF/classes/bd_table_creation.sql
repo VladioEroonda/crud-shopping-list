@@ -8,4 +8,4 @@ CREATE TABLE shopping_list_1
     PRIMARY KEY (id)
 );
 
-INSERT INTO shopping_list_1 (name, count, price) VALUES ('Coca Cola 1 l',2,77.50);
+INSERT INTO shopping_list_1 (name, count, price) VALUES ('test purchase',2,77.50);

@@ -1,5 +1,7 @@
 package ru.eroonda.shoppinglist.dao;
 
+import ru.eroonda.shoppinglist.util.DBDataGetter;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
