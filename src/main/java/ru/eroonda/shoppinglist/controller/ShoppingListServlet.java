@@ -28,6 +28,7 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
         HttpSession session = req.getSession();
 //        session.setMaxInactiveInterval(30);
 
+
         req.setCharacterEncoding("UTF-8");
 
         dao.addNewPurchase(
