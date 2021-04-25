@@ -1,0 +1,7 @@
+ru\eroonda\shoppinglist\dao\DBDataGetter.class
+ru\eroonda\shoppinglist\dao\ShoppingListDaoImpl.class
+ru\eroonda\shoppinglist\dao\ConnectionBuilder.class
+ru\eroonda\shoppinglist\entity\ShoppingList.class
+ru\eroonda\shoppinglist\Test.class
+ru\eroonda\shoppinglist\dao\ShoppingListDao.class
+ru\eroonda\shoppinglist\controller\ListServlet.class
