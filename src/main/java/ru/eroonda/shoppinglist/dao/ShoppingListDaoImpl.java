@@ -24,7 +24,7 @@ public class ShoppingListDaoImpl implements ShoppingListDao {
             "DELETE FROM shopping_list_1 WHERE session_id= ? ;";
 
     private static final String DELETE_ONE_CURRENT_PURCHASE=
-            "DELETE FROM shopping_list_1 WHERE name = ? AND count = ? AND price = ? AND session_id = ? ;";
+            "DELETE FROM shopping_list_1 WHERE id = ? AND name = ? AND count = ? AND price = ? AND session_id = ? ;";
 
 
     private Connection getConnection() throws SQLException {
@@ -44,6 +44,7 @@ public class ShoppingListDaoImpl implements ShoppingListDao {
 
             while (resultSet.next()) {
                 resultList.add(new ShoppingList(
+                        resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getInt("count"),
                         resultSet.getDouble("price"),
@@ -93,7 +94,7 @@ public class ShoppingListDaoImpl implements ShoppingListDao {
     }
 
     @Override
-    public void deleteOneCurrentPurchase(String name, int count, double price, String sessionId) {
+    public void deleteOneCurrentPurchase(int id, String name, int count, double price, String sessionId) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_ONE_CURRENT_PURCHASE)) {
 
@@ -104,11 +105,11 @@ public class ShoppingListDaoImpl implements ShoppingListDao {
 //                    "D price: \"" + price + "\"" +
 //                    "Sess ID:\"" + sessionId + "\""
 //            );
-
-            statement.setString(1, name);
-            statement.setInt(2, count);
-            statement.setDouble(3, price);
-            statement.setString(4, sessionId);
+            statement.setInt(1, id);
+            statement.setString(2, name);
+            statement.setInt(3, count);
+            statement.setDouble(4, price);
+            statement.setString(5, sessionId);
             boolean execute = statement.execute();
 
             logger.info("DAO DELETE_ONE AFTER SQL QUERY:" + execute);

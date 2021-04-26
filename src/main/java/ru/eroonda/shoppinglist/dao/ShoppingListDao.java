@@ -12,6 +12,6 @@ public interface ShoppingListDao {
 
     void deleteAllSessionPurchases(String sessionId);
 
-    void deleteOneCurrentPurchase(String name, int count, double price, String sessionId);
+    void deleteOneCurrentPurchase(int id, String name, int count, double price, String sessionId);
 
 }

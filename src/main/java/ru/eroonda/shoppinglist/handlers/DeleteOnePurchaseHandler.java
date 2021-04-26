@@ -14,17 +14,18 @@ public class DeleteOnePurchaseHandler {
     public static void deleteOnePurchase(ShoppingListDao dao, HttpServletRequest req) {
 
         String[] purchaseData = req.getParameter("purchaseForDelete").split(";");
-        logger.info("Current purchase data for delete : " +
-                "\nS name: \"" + purchaseData[0] + "\"" +
-                "\nI count: \"" + Integer.parseInt(purchaseData[1]) + "\"" +
-                "\nD price: \"" + Double.parseDouble(purchaseData[2]) + "\"" +
-                "\nSess ID:\"" + req.getSession().getId() + "\""
-        );
+//        logger.info("Current purchase data for delete : " +
+//                "\nS name: \"" + purchaseData[0] + "\"" +
+//                "\nI count: \"" + Integer.parseInt(purchaseData[1]) + "\"" +
+//                "\nD price: \"" + Double.parseDouble(purchaseData[2]) + "\"" +
+//                "\nSess ID:\"" + req.getSession().getId() + "\""
+//        );
 
         dao.deleteOneCurrentPurchase(
-                purchaseData[0].trim(), //Почему-то без trim добавляет то ли пробелы, то ли переносы
-                Integer.parseInt(purchaseData[1]),
-                Double.parseDouble(purchaseData[2]),
+                Integer.parseInt(purchaseData[0].trim()), // к 1му(0му) элементу добавляется лишний пробел хз почему, нужен .trim()
+                purchaseData[1],
+                Integer.parseInt(purchaseData[2]),
+                Double.parseDouble(purchaseData[3]),
                 req.getSession().getId());
 
     }

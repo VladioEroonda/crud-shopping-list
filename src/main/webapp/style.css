@@ -143,3 +143,7 @@ body{
     border: 2px grey;
     padding: 7px 17px;
 }
+
+input:invalid {
+    border: 2px dashed red;
+}

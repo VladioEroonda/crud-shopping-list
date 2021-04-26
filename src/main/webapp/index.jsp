@@ -18,6 +18,7 @@
 </head>
 <body>
 
+<a href="index.jsp" style="color: white">Главная страница</a>
 <form action="general-servlet" method="POST" >
     <input type="submit" value="Очистить весь список" class="border-button2" name="deleteAllLines" style="float: right;">
 </form>
@@ -57,7 +58,7 @@
                 <input type="submit" value="Изменить" class="border-button2" name="changeOneLine">
                 <input type="submit" value="Удалить" class="border-button2" name="deleteOneLine">
                 <input type="hidden" name="purchaseForDelete" value="
-<%= purchase.getName() + ";" + purchase.getCount() + ";" + purchase.getPrice() %> ">
+<%= purchase.getId() + ";"  + purchase.getName() + ";" + purchase.getCount() + ";" + purchase.getPrice() %> ">
             </form>
         </th>
         <th bgcolor="#333336">
@@ -90,14 +91,15 @@
 <h3>Добавьте свой товар: </h3>
 <form action="general-servlet" method="POST">
     Товар:
-    <input type="text" name="purchase_name" class="input-field">
+    <input type="text" name="purchase_name" class="input-field" required>
     Количество:
-    <input type="text" name="count" class="input-field">
+    <input type="number" name="count" class="input-field" required min="1">
     Цена:
-    <input type="text" name="price" class="input-field">
+    <input type="number" name="price" class="input-field" required min="0" step="0.1">
     <br><br>
     <input type="submit" value="Добавить в список" class="border-button" name="addOneLine">
 </form>
 <br/>
+
 </body>
 </html>

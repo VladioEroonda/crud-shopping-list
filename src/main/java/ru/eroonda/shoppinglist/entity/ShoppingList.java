@@ -1,6 +1,7 @@
 package ru.eroonda.shoppinglist.entity;
 
 public class ShoppingList {
+    private int id;
     private String name;
     private int count;
     private double price;
@@ -9,7 +10,8 @@ public class ShoppingList {
     public ShoppingList() {
     }
 
-    public ShoppingList(String name, int count, double price, String sessionId) {
+    public ShoppingList(int id, String name, int count, double price, String sessionId) {
+        this.id = id;
         this.name = name;
         this.count = count;
         this.price = price;
@@ -46,5 +48,13 @@ public class ShoppingList {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
