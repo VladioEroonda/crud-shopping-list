@@ -120,7 +120,7 @@ body{
     width: 100%;
     opacity: 1;
 }
-.border-button:hover:before {
+.border-button2:hover:before {
     transition: 0s ease opacity 0s, .2s ease height, .2s ease width .2s;
 }
 .border-button2:hover:after {
@@ -129,11 +129,6 @@ body{
 .border-button2:hover {
     background: rgba(255, 255, 255, .2);
 }
-
-
-
-
-
 
 .input-field{
     width: 200px;

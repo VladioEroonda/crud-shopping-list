@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 import ru.eroonda.shoppinglist.dao.ShoppingListDaoImpl;
+import ru.eroonda.shoppinglist.handlers.AddNewPurchaseHandler;
+import ru.eroonda.shoppinglist.handlers.DeleteAllPurchasesHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
@@ -24,20 +26,30 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ShoppingListDao dao = new ShoppingListDaoImpl();
-        HttpSession session = req.getSession();
-//        session.setMaxInactiveInterval(30);
 
+        ShoppingListDao dao = new ShoppingListDaoImpl();
+
+//        HttpSession session = req.getSession();
+//        session.setMaxInactiveInterval(30);
 
         req.setCharacterEncoding("UTF-8");
 
-        dao.addNewPurchase(
-                req.getParameter("purchase_name"),
-                req.getParameter("count"),
-                req.getParameter("price"),
-                session.getId());
+        if(req.getParameter("deleteOneLine") != null){
 
-        logger.info("POST. Adding new list position to DB, session id #" + session.getId());
+            logger.info("Delete line button was pushed");
+        }
+        if(req.getParameter("changeOneLine") != null){
+
+            logger.info("Change line button was pushed");
+        }
+        if(req.getParameter("deleteAllLines") != null){
+            new DeleteAllPurchasesHandler().deleteAllSessionPurchases(dao,req);
+            logger.info("Deleted all puchases from current session" + req.getSession().getId());
+        }
+        if(req.getParameter("addOneLine") != null){
+            new AddNewPurchaseHandler().addNewPurchase(dao, req);
+            logger.info("Added new list position to DB, session id #" + req.getSession().getId());
+        }
 
         getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
     }

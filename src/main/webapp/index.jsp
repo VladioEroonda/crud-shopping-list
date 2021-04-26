@@ -18,6 +18,11 @@
 </head>
 <body>
 
+<form action="general-servlet" method="POST" >
+    <input type="submit" value="Очистить весь список" class="border-button2" name="deleteAllLines" style="float: right;">
+</form>
+<br>
+<br>
 <table class="table_dark" >
     <h3 align="left">Ваш список покупок:</h3>
     <tr>
@@ -48,12 +53,11 @@
         </th>
 
         <th bgcolor="#333336">
-            <form action="/list-servlet" method="PUT">
-                <input type="submit" value="Изменить" class="border-button2">
+            <form action="general-servlet" method="POST">
+                <input type="submit" value="Изменить" class="border-button2" name="changeOneLine">
+                <input type="submit" value="Удалить" class="border-button2" name="deleteOneLine">
             </form>
-            <form action="/list-servlet" method="DELETE">
-                <input type="submit" value="Удалить" class="border-button2">
-            </form>
+
         </th>
         <th bgcolor="#333336">
 
@@ -77,7 +81,6 @@
     <th bgcolor="#333336" class="th2"></th>
     <tr>
 
-
 </table>
 
 <br>
@@ -92,7 +95,7 @@
     Цена:
     <input type="text" name="price" class="input-field">
     <br><br>
-    <input type="submit" value="Добавить в список" class="border-button">
+    <input type="submit" value="Добавить в список" class="border-button" name="addOneLine">
 </form>
 <br/>
 </body>
