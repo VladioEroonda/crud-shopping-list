@@ -6,6 +6,7 @@ import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 import ru.eroonda.shoppinglist.dao.ShoppingListDaoImpl;
 import ru.eroonda.shoppinglist.handlers.AddNewPurchaseHandler;
 import ru.eroonda.shoppinglist.handlers.DeleteAllPurchasesHandler;
+import ru.eroonda.shoppinglist.handlers.DeleteOnePurchaseHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
@@ -35,7 +36,7 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
         req.setCharacterEncoding("UTF-8");
 
         if(req.getParameter("deleteOneLine") != null){
-
+            DeleteOnePurchaseHandler.deleteOnePurchase(dao,req);
             logger.info("Delete line button was pushed");
         }
         if(req.getParameter("changeOneLine") != null){
@@ -43,11 +44,11 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
             logger.info("Change line button was pushed");
         }
         if(req.getParameter("deleteAllLines") != null){
-            new DeleteAllPurchasesHandler().deleteAllSessionPurchases(dao,req);
+            DeleteAllPurchasesHandler.deleteAllSessionPurchases(dao,req);//static?
             logger.info("Deleted all puchases from current session" + req.getSession().getId());
         }
         if(req.getParameter("addOneLine") != null){
-            new AddNewPurchaseHandler().addNewPurchase(dao, req);
+            AddNewPurchaseHandler.addNewPurchase(dao, req);
             logger.info("Added new list position to DB, session id #" + req.getSession().getId());
         }
 

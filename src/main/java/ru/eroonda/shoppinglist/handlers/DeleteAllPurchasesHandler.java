@@ -5,8 +5,9 @@ import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 import javax.servlet.http.HttpServletRequest;
 
 public class DeleteAllPurchasesHandler {
-    public void deleteAllSessionPurchases(ShoppingListDao dao, HttpServletRequest req) {
+    public static void deleteAllSessionPurchases(ShoppingListDao dao, HttpServletRequest req) {
 
         dao.deleteAllSessionPurchases(req.getSession().getId());
+        
     }
 }

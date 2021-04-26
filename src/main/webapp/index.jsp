@@ -56,8 +56,9 @@
             <form action="general-servlet" method="POST">
                 <input type="submit" value="Изменить" class="border-button2" name="changeOneLine">
                 <input type="submit" value="Удалить" class="border-button2" name="deleteOneLine">
+                <input type="hidden" name="purchaseForDelete" value="
+<%= purchase.getName() + ";" + purchase.getCount() + ";" + purchase.getPrice() %> ">
             </form>
-
         </th>
         <th bgcolor="#333336">
 
