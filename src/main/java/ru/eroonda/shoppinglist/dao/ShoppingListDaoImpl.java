@@ -27,11 +27,13 @@ public class ShoppingListDaoImpl implements ShoppingListDao {
                     "AND count = ? AND price = ? AND session_id = ? ;";
 
     private static final String UPDATE_ONE_CURRENT_PURCHASE =
-            "UPDATE shopping_list_1 SET name = ? , count = ? , price = ? " +
+            "UPDATE shopping_list_1 SET name = ? , count = ? , price = ?, is_changing = false " +
                     "WHERE session_id = ? AND id = ? ;";
 
-    //UPDATE shopping_list_1 SET name = 'testgf', count = 3, price = 12
-    //WHERE session_id = '4259A1BA5CE751A9ACF9E641558B4626' AND id = 107 ;
+    private static final String SET_IS_CHANGING_AS_TRUE_FOR_ONE_PURCHASE =
+            "UPDATE shopping_list_1 SET is_changing = true " +
+                    "WHERE id = ? ;";
+
 
 
     private Connection getConnection() throws SQLException {
@@ -135,7 +137,8 @@ public class ShoppingListDaoImpl implements ShoppingListDao {
             statement.setDouble(3, price);
             statement.setString(4, sessionId);
             statement.setInt(5, id);
-            statement.execute();
+
+            logger.info("UPDATING ONE PURCH STATUS: " + statement.execute());
 
         } catch (SQLException exception) {
             System.out.println("<center><h3>Well, something went wrong:(.</h3>" +
@@ -144,6 +147,21 @@ public class ShoppingListDaoImpl implements ShoppingListDao {
         }
     }
 
+    @Override
+    public void setIsChangingAsTrueForOnePurchase(int id) {
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(SET_IS_CHANGING_AS_TRUE_FOR_ONE_PURCHASE)) {
+
+            statement.setInt(1, id);
+            statement.execute();
+
+        } catch (SQLException exception) {
+            System.out.println("<center><h3>Well, something went wrong:(.</h3>" +
+                    "<br><a href=\"/index.jsp\">try again</a></center>");
+            exception.printStackTrace();
+        }
+    }
 
 
 }

@@ -1,21 +1,31 @@
 package ru.eroonda.shoppinglist.handlers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.eroonda.shoppinglist.controller.ShoppingListServlet;
 import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 public class UpdateOnePurchaseHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(UpdateOnePurchaseHandler.class);
+
     public static void updateOnePurchase(ShoppingListDao dao, HttpServletRequest req) {
 
-        //Поменять
-        String[] purchaseData = req.getParameter("purchaseForDelete").split(";");
+        String[] purchaseData = req.getParameter("purchaseForDeleteOrEdit").split(";");
+        String newName = req.getParameter("new_purchase_name");
+        String newCount = req.getParameter("new_count");
+        String newPrice = req.getParameter("new_price");
 
-        dao.deleteOneCurrentPurchase(
+        logger.info("DATA FOR UPDATE" + Arrays.toString(purchaseData) + newName + newName.length() + newCount + newPrice);
+
+        dao.updateOneCurrentPurchase(
                 Integer.parseInt(purchaseData[0].trim()), // к 1му(0му) элементу добавляется лишний пробел хз почему, нужен .trim()
-                purchaseData[1],
-                Integer.parseInt(purchaseData[2]),
-                Double.parseDouble(purchaseData[3]),
+                newName,
+                Integer.parseInt(newCount),
+                Double.parseDouble(newPrice),
                 req.getSession().getId());
     }
 }

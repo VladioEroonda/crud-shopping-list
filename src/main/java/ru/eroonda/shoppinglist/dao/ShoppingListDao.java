@@ -16,4 +16,5 @@ public interface ShoppingListDao {
 
     void updateOneCurrentPurchase(int id, String name, int count, double price, String sessionId);
 
+    void setIsChangingAsTrueForOnePurchase(int id);
 }

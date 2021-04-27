@@ -14,8 +14,11 @@ public class DeleteOnePurchaseHandler {
 
     public static void deleteOnePurchase(ShoppingListDao dao, HttpServletRequest req) {
 
-        String[] purchaseData = req.getParameter("purchaseForDelete").split(";");
+        String[] purchaseData = req.getParameter("purchaseForDeleteOrEdit").split(";");
+
+        //TODO убери логгер
         logger.info(Arrays.toString(purchaseData));
+
         dao.deleteOneCurrentPurchase(
                 Integer.parseInt(purchaseData[0].trim()), // к 1му(0му) элементу добавляется лишний пробел хз почему, нужен .trim()
                 purchaseData[1],

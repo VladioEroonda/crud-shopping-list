@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 import ru.eroonda.shoppinglist.dao.ShoppingListDaoImpl;
-import ru.eroonda.shoppinglist.handlers.AddNewPurchaseHandler;
-import ru.eroonda.shoppinglist.handlers.DeleteAllPurchasesHandler;
-import ru.eroonda.shoppinglist.handlers.DeleteOnePurchaseHandler;
+import ru.eroonda.shoppinglist.handlers.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
@@ -38,12 +36,14 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
             logger.info("Delete line button was pushed");
         }
 
-        if (req.getParameter("changeOneLine") != null) {
-            logger.info("Change line button was pushed");
+        if (req.getParameter("editOneLine") != null) {
+            PurchaseEditorActivatorHandler.setIsChangingAsTrue(dao, req);
+            logger.info("Edit line button was pushed");
         }
 
-        if (req.getParameter("changeOneLine") != null) {
-            logger.info("Change line button was pushed");
+        if (req.getParameter("updateOneLine") != null) {
+            UpdateOnePurchaseHandler.updateOnePurchase(dao,req);
+            logger.info("Update line button was pushed");
         }
 
         if (req.getParameter("deleteAllLines") != null) {
