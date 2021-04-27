@@ -6,16 +6,18 @@ public class ShoppingList {
     private int count;
     private double price;
     private String sessionId;
+    private boolean isChanging;
 
     public ShoppingList() {
     }
 
-    public ShoppingList(int id, String name, int count, double price, String sessionId) {
+    public ShoppingList(int id, String name, int count, double price, String sessionId, boolean isChanging) {
         this.id = id;
         this.name = name;
         this.count = count;
         this.price = price;
         this.sessionId = sessionId;
+        this.isChanging = isChanging;
     }
 
     public String getName() {
@@ -57,4 +59,13 @@ public class ShoppingList {
     public void setId(int id) {
         this.id = id;
     }
+
+    public boolean isChanging() {
+        return isChanging;
+    }
+
+    public void setChanging(boolean changing) {
+        isChanging = changing;
+    }
+
 }

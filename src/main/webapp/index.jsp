@@ -2,6 +2,7 @@
 <%@ page import="ru.eroonda.shoppinglist.dao.ShoppingListDaoImpl" %>
 <%@ page import="ru.eroonda.shoppinglist.entity.ShoppingList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     Class.forName("org.postgresql.Driver");
@@ -38,7 +39,13 @@
     </tr>
     <%
         List<ShoppingList> allPurchases = dao.getAllPurchases(request.getRequestedSessionId());
+
+        if(allPurchases == null){
+            allPurchases=new ArrayList<>();
+        }
+
         for (ShoppingList purchase : allPurchases) {
+            if(!purchase.isChanging()) {
     %>
     <tr>
 
@@ -68,19 +75,24 @@
     </tr>
 
     <%
+            } else {
+
+            }
+//            тут шоле
+
             total_cost += purchase.getPrice() * purchase.getCount();
             purchase_count++;
         }
     %>
     <tr>
-    <th colspan="5">Всего позиций: <%=allPurchases.isEmpty() ? 0 : allPurchases.size() %></th>
+        <th colspan="5">Всего позиций: <%=allPurchases.isEmpty() ? 0 : allPurchases.size() %></th>
         <th bgcolor="#333336" class="th2"></th>
         <th bgcolor="#333336" class="th2"></th>
     </tr>
     <tr>
-    <th colspan="5">Общая сумма: <%=total_cost%></th>
-    <th bgcolor="#333336" class="th2"></th>
-    <th bgcolor="#333336" class="th2"></th>
+        <th colspan="5">Общая сумма: <%=total_cost%></th>
+        <th bgcolor="#333336" class="th2"></th>
+        <th bgcolor="#333336" class="th2"></th>
     <tr>
 
 </table>

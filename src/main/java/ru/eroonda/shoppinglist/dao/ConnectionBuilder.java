@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 public class ConnectionBuilder {
     public static Connection getConnection() throws SQLException {
+
         String[] dbData = DBDataGetter.getDBData();
 
         try {
@@ -16,6 +17,7 @@ public class ConnectionBuilder {
             e.printStackTrace();
         }
         Connection connection = DriverManager.getConnection(dbData[0], dbData[1], dbData[2]);
+
         return connection;
     }
 

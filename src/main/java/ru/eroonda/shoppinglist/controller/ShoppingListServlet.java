@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.List;
 
 @WebListener
 @WebServlet(name = "listServlet", value = "/general-servlet")
@@ -22,7 +23,7 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req,resp);
+        doPost(req, resp);
     }
 
     @Override
@@ -30,24 +31,27 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
 
         ShoppingListDao dao = new ShoppingListDaoImpl();
 
-//        HttpSession session = req.getSession();
-//        session.setMaxInactiveInterval(30);
-
         req.setCharacterEncoding("UTF-8");
 
-        if(req.getParameter("deleteOneLine") != null){
-            DeleteOnePurchaseHandler.deleteOnePurchase(dao,req);
+        if (req.getParameter("deleteOneLine") != null) {
+            DeleteOnePurchaseHandler.deleteOnePurchase(dao, req);
             logger.info("Delete line button was pushed");
         }
-        if(req.getParameter("changeOneLine") != null){
 
+        if (req.getParameter("changeOneLine") != null) {
             logger.info("Change line button was pushed");
         }
-        if(req.getParameter("deleteAllLines") != null){
-            DeleteAllPurchasesHandler.deleteAllSessionPurchases(dao,req);//static?
+
+        if (req.getParameter("changeOneLine") != null) {
+            logger.info("Change line button was pushed");
+        }
+
+        if (req.getParameter("deleteAllLines") != null) {
+            DeleteAllPurchasesHandler.deleteAllSessionPurchases(dao, req);
             logger.info("Deleted all puchases from current session" + req.getSession().getId());
         }
-        if(req.getParameter("addOneLine") != null){
+
+        if (req.getParameter("addOneLine") != null) {
             AddNewPurchaseHandler.addNewPurchase(dao, req);
             logger.info("Added new list position to DB, session id #" + req.getSession().getId());
         }

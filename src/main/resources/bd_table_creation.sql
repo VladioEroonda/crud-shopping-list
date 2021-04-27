@@ -1,11 +1,10 @@
 CREATE TABLE shopping_list_1
 (
     id    SERIAL,
-    name  VARCHAR(100),
-    count INTEGER,
-    price NUMERIC(10, 2),
-    session_id VARCHAR (40),
+    name  VARCHAR(100) NOT NULL,
+    count INTEGER NOT NULL,
+    price NUMERIC(10, 2) NOT NULL,
+    session_id VARCHAR (40) NOT NULL,
+    is_changing boolean NOT NULL,
     PRIMARY KEY (id)
 );
-
-INSERT INTO shopping_list_1 (name, count, price) VALUES ('test purchase',2,77.50);
