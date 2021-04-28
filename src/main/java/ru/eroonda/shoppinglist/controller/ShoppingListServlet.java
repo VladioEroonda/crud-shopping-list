@@ -2,6 +2,8 @@ package ru.eroonda.shoppinglist.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.eroonda.shoppinglist.builder.PdfBuilder;
+import ru.eroonda.shoppinglist.builder.XlsxBuilder;
 import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 import ru.eroonda.shoppinglist.dao.ShoppingListDaoImpl;
 import ru.eroonda.shoppinglist.handlers.*;
@@ -56,6 +58,16 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
             logger.info("Added new list position to DB, session id #" + req.getSession().getId());
         }
 
+        if (req.getParameter("saveAsXlsx") != null) {
+            logger.info("save as XLSX button");
+            XlsxBuilder.build(dao, req.getSession().getId());
+        }
+
+        if (req.getParameter("saveAsPdf") != null) {
+            logger.info("save as PDF button");
+            PdfBuilder.build(dao, req.getSession().getId());
+        }
+
         getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 
@@ -70,5 +82,11 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
         ShoppingListDao dao = new ShoppingListDaoImpl();
         dao.deleteAllSessionPurchases(se.getSession().getId());
         logger.info("All purchases from session #" + se.getSession().getId() + " was deleted from BD");
+    }
+
+    @Override
+    public void destroy() {
+
+        new ShoppingListDaoImpl().tableTruncate();
     }
 }

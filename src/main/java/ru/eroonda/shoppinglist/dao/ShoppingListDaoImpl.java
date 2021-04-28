@@ -34,7 +34,8 @@ public class ShoppingListDaoImpl implements ShoppingListDao {
             "UPDATE shopping_list_1 SET is_changing = true " +
                     "WHERE id = ? ;";
 
-
+    private static final String TABLE_TRUNCATE =
+            "TRUNCATE TABLE shopping_list_1;";
 
     private Connection getConnection() throws SQLException {
         return ConnectionBuilder.getConnection();
@@ -155,6 +156,20 @@ public class ShoppingListDaoImpl implements ShoppingListDao {
 
             statement.setInt(1, id);
             statement.execute();
+
+        } catch (SQLException exception) {
+            System.out.println("<center><h3>Well, something went wrong:(.</h3>" +
+                    "<br><a href=\"/index.jsp\">try again</a></center>");
+            exception.printStackTrace();
+        }
+    }
+
+    @Override
+    public void tableTruncate() {
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()) {
+
+            statement.execute(TABLE_TRUNCATE);
 
         } catch (SQLException exception) {
             System.out.println("<center><h3>Well, something went wrong:(.</h3>" +

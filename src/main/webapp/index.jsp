@@ -127,6 +127,11 @@
 
 </table>
 
+<form action="general-servlet" method="POST">
+    <input type="submit" value="Скачать в .xlsx" class="border-button2" name="saveAsXlsx">
+    <input type="submit" value="Скачать в .pdf" class="border-button2" name="saveAsPdf">
+</form>
+
 <br>
 <br>
 <br>
