@@ -8,6 +8,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 import ru.eroonda.shoppinglist.entity.ShoppingList;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 //HSSF - XLS
@@ -30,7 +34,7 @@ public class XlsxBuilder {
         generalCellStyle.setFont(generalCellsFont);
         generalCellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-        Row row = sheet.getRow(rowNum);
+        Row row = sheet.createRow(rowNum);
         Cell cell = row.createCell(0, CellType.STRING); //Делаем оглавление
         cell.setCellValue("Название товара");
         cell.setCellStyle(generalCellStyle);
@@ -44,34 +48,64 @@ public class XlsxBuilder {
         cell.setCellValue("Сумма");
         cell.setCellStyle(generalCellStyle);
 
-        XSSFFont simpleCellsFont = workbook.createFont();//стиль для выделения важных ячеек
-        simpleCellsFont.setBold(true);// Потом можно будет отрефакторить в метод
-        simpleCellsFont.setColor(IndexedColors.RED.index);
         XSSFCellStyle simpleCellStyle = workbook.createCellStyle();
-        simpleCellStyle.setFont(generalCellsFont);
         simpleCellStyle.setAlignment(HorizontalAlignment.CENTER);
 
         for (ShoppingList oneListPosition : allPurchases) {
-            rowNum++;
+            ++rowNum;
 
             row = sheet.createRow(rowNum);
             cell = row.createCell(0, CellType.STRING);
             cell.setCellValue(oneListPosition.getName());
             cell.setCellStyle(simpleCellStyle);
             cell = row.createCell(1, CellType.NUMERIC);
-            cell.setCellValue(oneListPosition.getName());
+            cell.setCellValue(oneListPosition.getCount());
             cell.setCellStyle(simpleCellStyle);
             cell = row.createCell(2, CellType.NUMERIC);
-            cell.setCellValue(oneListPosition.getName());
+            cell.setCellValue(oneListPosition.getPrice());
             cell.setCellStyle(simpleCellStyle);
             cell = row.createCell(3, CellType.FORMULA);
             cell.setCellStyle(simpleCellStyle);
-            String oneLineSumFormula = "B"+(rowNum+1)+"*C"+(rowNum+1);
+            String oneLineSumFormula = "B" + (rowNum + 1) + "*C" + (rowNum + 1);
             cell.setCellFormula(oneLineSumFormula);
-
-
         }
 
-        //TODO:Тут добавить ещё две строчки с формулами COUNTA и SUM. Плюс сохранение в файл и оттестить
+        row = sheet.createRow(rowNum + 2);
+        cell=row.createCell(0,CellType.STRING);
+        cell.setCellStyle(generalCellStyle);
+        cell.setCellValue("Кол-во позиций:");
+        cell=row.createCell(1,CellType.FORMULA);
+        cell.setCellStyle(generalCellStyle);
+        cell.setCellFormula("COUNTA(A2:A" + (rowNum+1) +")");
+
+        row = sheet.createRow(rowNum + 3);
+        cell=row.createCell(0,CellType.STRING);
+        cell.setCellStyle(generalCellStyle);
+        cell.setCellValue("Общая сумма:");
+        cell=row.createCell(1,CellType.FORMULA);
+        cell.setCellStyle(generalCellStyle);
+        cell.setCellFormula("SUM(D2:D" + (rowNum+1) +")");
+
+
+        String genereatedFileName = "Shoppinglist";
+
+        if (sessionId == null && sessionId.length() < 5) {
+            genereatedFileName += ((int) (Math.random() * 100));
+        } else {
+            genereatedFileName += sessionId.substring(0, 6);
+        }
+
+        File file = new File((genereatedFileName + ".xlsx"));
+
+        try {
+            FileOutputStream outFile = new FileOutputStream(file);
+            workbook.write(outFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Created file: " + file.getAbsolutePath());
     }
 }
