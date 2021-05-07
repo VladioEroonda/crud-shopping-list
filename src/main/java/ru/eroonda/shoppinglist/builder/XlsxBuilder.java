@@ -8,17 +8,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 import ru.eroonda.shoppinglist.entity.ShoppingList;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.List;
 
-//HSSF - XLS
-//XSSF - XLSX
 public class XlsxBuilder {
 
-    public static void build(ShoppingListDao dao, String sessionId){
+    public static void build(ShoppingListDao dao,String sessionId, HttpServletResponse resp){
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Shopping List");
@@ -86,7 +82,6 @@ public class XlsxBuilder {
         cell.setCellStyle(generalCellStyle);
         cell.setCellFormula("SUM(D2:D" + (rowNum+1) +")");
 
-
         String genereatedFileName = "Shoppinglist";
 
         if (sessionId == null && sessionId.length() < 5) {
@@ -95,17 +90,27 @@ public class XlsxBuilder {
             genereatedFileName += sessionId.substring(0, 6);
         }
 
-        File file = new File((genereatedFileName + ".xlsx"));
+        sendFileToUse(resp, workbook, genereatedFileName);
+
+    }
+
+    private static void sendFileToUse(HttpServletResponse response, XSSFWorkbook workbook,String genereatedFileName){
+
+        ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
         try {
-            FileOutputStream outFile = new FileOutputStream(file);
-            workbook.write(outFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            workbook.write(outByteStream);
+            byte [] outArray = outByteStream.toByteArray();
+            response.setContentType("application/ms-excel");
+            response.setContentLength(outArray.length);
+            response.setHeader("Content-Disposition", ("attachment; filename="+genereatedFileName+".xlsx"));
+            OutputStream outStream = response.getOutputStream();
+            outStream.write(outArray);
+            outStream.flush();
+            outStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();//TODO exc
         }
 
-        System.out.println("Created file: " + file.getAbsolutePath());
     }
 }

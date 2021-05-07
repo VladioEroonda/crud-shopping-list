@@ -13,7 +13,6 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.List;
 
 @WebListener
 @WebServlet(name = "listServlet", value = "/general-servlet")
@@ -60,12 +59,12 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
 
         if (req.getParameter("saveAsXlsx") != null) {
             logger.info("save as XLSX button");
-            XlsxBuilder.build(dao, req.getSession().getId());
+            XlsxBuilder.build(dao, req.getSession().getId(), resp);
         }
 
         if (req.getParameter("saveAsPdf") != null) {
             logger.info("save as PDF button");
-            PdfBuilder.build(dao, req.getSession().getId());
+            PdfBuilder.build(dao, req.getSession().getId(), resp);
         }
 
         getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
@@ -78,6 +77,7 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
+
         logger.info("Destroying session #" + se.getSession().getId());
         ShoppingListDao dao = new ShoppingListDaoImpl();
         dao.deleteAllSessionPurchases(se.getSession().getId());
