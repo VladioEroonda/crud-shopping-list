@@ -19,15 +19,11 @@ public class PdfBuilder {
 
         List<ShoppingList> allPurchases = dao.getAllPurchases(sessionId);
 
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Document document = new Document();
 
-        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();){
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();) {
 
             PdfWriter.getInstance(document, byteArrayOutputStream);
-//            PdfWriter writer = new PdfWriter(byteArrayOutputStream);
-//            PdfDocument pdfDocument = new PdfDocument(writer);
-//            Document document = new Document(pdfDocument);
 
             document.open();
 
@@ -52,11 +48,13 @@ public class PdfBuilder {
             }
 
             int count = 0;
-            double totalSum = 0;
+            double totalListSum = 0;
 
             for (ShoppingList purchase : allPurchases) { // content generator
 
                 count++;
+
+                double totalPurchaseSum;
 
                 PdfPCell сellCount = new PdfPCell();
                 Phrase phraseCount = new Phrase(((Integer) count).toString(), font);
@@ -78,56 +76,39 @@ public class PdfBuilder {
                 cellPrice.setPhrase(phrasePrice);
                 table.addCell(cellPrice);
 
-                totalSum = purchase.getCount() * purchase.getPrice();
+                totalPurchaseSum = purchase.getCount() * purchase.getPrice();
+                totalListSum +=totalPurchaseSum;
 
                 PdfPCell cellSum = new PdfPCell();
-                Phrase phraseSum = new Phrase(((Double) (totalSum)).toString(), font);
+                Phrase phraseSum = new Phrase(((Double) (totalPurchaseSum)).toString(), font);
                 cellSum.setPhrase(phraseSum);
                 table.addCell(cellSum);
 
             }
 
-            for (int i = 0; i < 1; i++) { // sum generator ТУТ сделай рефактор в отдельный метод, и др метод с ячейкой с кол-вом потом ещё
+            cellsWithTotalValues("Сумма: ", ((Double) totalListSum).toString(), table, font);
+            cellsWithTotalValues("Кол-во позиций: ", ((Integer) count).toString(), table, font);
 
-                PdfPCell sumCellName = new PdfPCell();
-                sumCellName.setBackgroundColor(BaseColor.LIGHT_GRAY);
-                Phrase phrase = new Phrase("Сумма:", font);
-                sumCellName.setPhrase(phrase);
-                table.addCell(sumCellName);
-
-                PdfPCell sumCellSum = new PdfPCell();
-                sumCellName.setBackgroundColor(BaseColor.LIGHT_GRAY);
-                Phrase phraseSum = new Phrase(((Double) totalSum).toString(), font);
-                sumCellSum.setPhrase(phraseSum);
-                table.addCell(sumCellSum);
-
-                for (int j = 0; j < 3; j++) {
-                    PdfPCell emptyCell = new PdfPCell();
-                    Phrase emptyPhrase = new Phrase("", font);
-                    emptyCell.setPhrase(emptyPhrase);
-                    table.addCell(emptyCell);
-                }
-
-            }
 
             document.add(table);
             document.close();
 
-            sendFileToUser(resp, byteArrayOutputStream);
+            String genereatedFileName = nameGenerator(sessionId);
+
+            sendFileToUser(resp, byteArrayOutputStream, genereatedFileName);
 
         } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void sendFileToUser(HttpServletResponse response, ByteArrayOutputStream byteArrayOutputStream) {
+    private static void sendFileToUser(HttpServletResponse response, ByteArrayOutputStream byteArrayOutputStream, String genereatedFileName) {
 
         try {
             byte[] outArray = byteArrayOutputStream.toByteArray();
             response.setContentType("application/pdf");
             response.setContentLength(outArray.length);
-            //TODO:generating name method
-            response.setHeader("Content-Disposition", ("attachment; filename=" + "genereatedFileName" + ".pdf"));
+            response.setHeader("Content-Disposition", ("attachment; filename=" + genereatedFileName + ".pdf"));
             OutputStream outStream = response.getOutputStream();
             outStream.write(outArray);
             outStream.flush();
@@ -137,4 +118,43 @@ public class PdfBuilder {
             e.printStackTrace();//TODO exc
         }
     }
+
+    private static String nameGenerator(String sessionId) {
+
+        String genereatedFileName = "Shoppinglist";
+
+        if (sessionId == null && sessionId.length() < 5) {
+            genereatedFileName += ((int) (Math.random() * 100));
+        } else {
+            genereatedFileName += sessionId.substring(0, 6);
+        }
+
+        return genereatedFileName;
+    }
+
+    private static void cellsWithTotalValues(String cellName, String value, PdfPTable table, Font font) {
+
+        for (int i = 0; i < 1; i++) {
+
+            PdfPCell sumCellName = new PdfPCell();
+            sumCellName.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            Phrase phrase = new Phrase(cellName, font);
+            sumCellName.setPhrase(phrase);
+            table.addCell(sumCellName);
+
+            PdfPCell sumCellSum = new PdfPCell();
+            sumCellName.setBackgroundColor(BaseColor.LIGHT_GRAY);
+            Phrase phraseSum = new Phrase(value, font);
+            sumCellSum.setPhrase(phraseSum);
+            table.addCell(sumCellSum);
+
+            for (int j = 0; j < 3; j++) {
+                PdfPCell emptyCell = new PdfPCell();
+                Phrase emptyPhrase = new Phrase("", font);
+                emptyCell.setPhrase(emptyPhrase);
+                table.addCell(emptyCell);
+            }
+        }
+    }
+
 }

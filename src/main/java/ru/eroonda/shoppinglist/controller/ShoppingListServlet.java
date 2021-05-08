@@ -77,7 +77,6 @@ public class ShoppingListServlet extends HttpServlet implements HttpSessionListe
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-
         logger.info("Destroying session #" + se.getSession().getId());
         ShoppingListDao dao = new ShoppingListDaoImpl();
         dao.deleteAllSessionPurchases(se.getSession().getId());

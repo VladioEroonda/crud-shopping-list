@@ -1,6 +1,7 @@
 package ru.eroonda.shoppinglist.util;
 
 public class DBDataGetter {
+
     public static String[] getDBData() {
         return getDataFromSystem();
     }

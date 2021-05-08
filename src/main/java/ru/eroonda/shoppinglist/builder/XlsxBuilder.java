@@ -14,7 +14,7 @@ import java.util.List;
 
 public class XlsxBuilder {
 
-    public static void build(ShoppingListDao dao,String sessionId, HttpServletResponse resp){
+    public static void build(ShoppingListDao dao, String sessionId, HttpServletResponse resp) {
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Shopping List");
@@ -67,43 +67,36 @@ public class XlsxBuilder {
         }
 
         row = sheet.createRow(rowNum + 2);
-        cell=row.createCell(0,CellType.STRING);
+        cell = row.createCell(0, CellType.STRING);
         cell.setCellStyle(generalCellStyle);
         cell.setCellValue("Кол-во позиций:");
-        cell=row.createCell(1,CellType.FORMULA);
+        cell = row.createCell(1, CellType.FORMULA);
         cell.setCellStyle(generalCellStyle);
-        cell.setCellFormula("COUNTA(A2:A" + (rowNum+1) +")");
+        cell.setCellFormula("COUNTA(A2:A" + (rowNum + 1) + ")");
 
         row = sheet.createRow(rowNum + 3);
-        cell=row.createCell(0,CellType.STRING);
+        cell = row.createCell(0, CellType.STRING);
         cell.setCellStyle(generalCellStyle);
         cell.setCellValue("Общая сумма:");
-        cell=row.createCell(1,CellType.FORMULA);
+        cell = row.createCell(1, CellType.FORMULA);
         cell.setCellStyle(generalCellStyle);
-        cell.setCellFormula("SUM(D2:D" + (rowNum+1) +")");
+        cell.setCellFormula("SUM(D2:D" + (rowNum + 1) + ")");
 
-        String genereatedFileName = "Shoppinglist";
-
-        if (sessionId == null && sessionId.length() < 5) {
-            genereatedFileName += ((int) (Math.random() * 100));
-        } else {
-            genereatedFileName += sessionId.substring(0, 6);
-        }
+        String genereatedFileName = nameGenerator(sessionId);
 
         sendFileToUse(resp, workbook, genereatedFileName);
 
     }
 
-    private static void sendFileToUse(HttpServletResponse response, XSSFWorkbook workbook,String genereatedFileName){
+    private static void sendFileToUse(HttpServletResponse response, XSSFWorkbook workbook, String genereatedFileName) {
 
-        ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
-        try {
+        try (ByteArrayOutputStream outByteStream = new ByteArrayOutputStream()) {
             workbook.write(outByteStream);
-            byte [] outArray = outByteStream.toByteArray();
+            byte[] outArray = outByteStream.toByteArray();
             response.setContentType("application/ms-excel");
             response.setContentLength(outArray.length);
-            response.setHeader("Content-Disposition", ("attachment; filename="+genereatedFileName+".xlsx"));
+            response.setHeader("Content-Disposition", ("attachment; filename=" + genereatedFileName + ".xlsx"));
             OutputStream outStream = response.getOutputStream();
             outStream.write(outArray);
             outStream.flush();
@@ -113,4 +106,18 @@ public class XlsxBuilder {
         }
 
     }
+
+    private static String nameGenerator(String sessionId) {
+
+        String genereatedFileName = "Shoppinglist";
+
+        if (sessionId == null && sessionId.length() < 5) {
+            genereatedFileName += ((int) (Math.random() * 100));
+        } else {
+            genereatedFileName += sessionId.substring(0, 6);
+        }
+
+        return genereatedFileName;
+    }
+
 }
