@@ -2,11 +2,14 @@ package ru.eroonda.shoppinglist.handlers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.eroonda.shoppinglist.controller.ShoppingListServlet;
 import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+
+/**
+ *
+ */
 
 public class UpdateOnePurchaseHandler {
 
@@ -22,7 +25,7 @@ public class UpdateOnePurchaseHandler {
         logger.info("DATA FOR UPDATE" + Arrays.toString(purchaseData) + newName + newName.length() + newCount + newPrice);
 
         dao.updateOneCurrentPurchase(
-                Integer.parseInt(purchaseData[0].trim()), // к 1му(0му) элементу добавляется лишний пробел хз почему, нужен .trim()
+                Integer.parseInt(purchaseData[0].trim()), // к 1му(0му) элементу добавляется лишний пробел почему-то, нужен .trim()
                 newName,
                 Integer.parseInt(newCount),
                 Double.parseDouble(newPrice),

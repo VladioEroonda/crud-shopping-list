@@ -11,6 +11,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+/**
+ * Генерирует .pdf файл списка покупок с именем из первых 6-ти символов сессии и возвращает пользователю на скачку
+ */
+
 public class PdfBuilder {
 
     private static final String[] headerCellNames = {"№", "Название товара", "Кол-во", "Цена за 1 шт", "Сумма"};
@@ -77,7 +81,7 @@ public class PdfBuilder {
                 table.addCell(cellPrice);
 
                 totalPurchaseSum = purchase.getCount() * purchase.getPrice();
-                totalListSum +=totalPurchaseSum;
+                totalListSum += totalPurchaseSum;
 
                 PdfPCell cellSum = new PdfPCell();
                 Phrase phraseSum = new Phrase(((Double) (totalPurchaseSum)).toString(), font);
@@ -115,7 +119,7 @@ public class PdfBuilder {
             outStream.close();
 
         } catch (IOException e) {
-            e.printStackTrace();//TODO exc
+            e.printStackTrace();
         }
     }
 
@@ -132,6 +136,7 @@ public class PdfBuilder {
         return genereatedFileName;
     }
 
+    //Нижние стобцы "Сумма" и "Кол-во позиций"
     private static void cellsWithTotalValues(String cellName, String value, PdfPTable table, Font font) {
 
         for (int i = 0; i < 1; i++) {

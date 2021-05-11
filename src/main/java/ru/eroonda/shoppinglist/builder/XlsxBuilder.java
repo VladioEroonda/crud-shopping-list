@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
 
+/**
+ * Генерирует .xlsx файл списка покупок с именем из первых 6-ти символов сессии и возвращает пользователю на скачку
+ */
+
 public class XlsxBuilder {
 
     public static void build(ShoppingListDao dao, String sessionId, HttpServletResponse resp) {
@@ -102,7 +106,7 @@ public class XlsxBuilder {
             outStream.flush();
             outStream.close();
         } catch (IOException e) {
-            e.printStackTrace();//TODO exc
+            e.printStackTrace();
         }
 
     }
