@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 import ru.eroonda.shoppinglist.entity.ShoppingList;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.List;
@@ -18,7 +19,9 @@ import java.util.List;
 
 public class XlsxBuilder {
 
-    public static void build(ShoppingListDao dao, String sessionId, HttpServletResponse resp) {
+    public static void build(ShoppingListDao dao, HttpServletRequest request, HttpServletResponse response) {
+
+        String sessionId = request.getSession().getId();
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Shopping List");
@@ -88,7 +91,7 @@ public class XlsxBuilder {
 
         String genereatedFileName = nameGenerator(sessionId);
 
-        sendFileToUse(resp, workbook, genereatedFileName);
+        sendFileToUse(response, workbook, genereatedFileName);
 
     }
 

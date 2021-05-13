@@ -5,22 +5,19 @@ import org.slf4j.LoggerFactory;
 import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
-/**
- *
- */
+public class UpdateOnePurchaseHandler implements Handler {
 
-public class UpdateOnePurchaseHandler {
+    private final Logger logger = LoggerFactory.getLogger(UpdateOnePurchaseHandler.class);
 
-    private static final Logger logger = LoggerFactory.getLogger(UpdateOnePurchaseHandler.class);
+    public void handle(ShoppingListDao dao, HttpServletRequest request, HttpServletResponse response) {
 
-    public static void updateOnePurchase(ShoppingListDao dao, HttpServletRequest req) {
-
-        String[] purchaseData = req.getParameter("purchaseForDeleteOrEdit").split(";");
-        String newName = req.getParameter("new_purchase_name");
-        String newCount = req.getParameter("new_count");
-        String newPrice = req.getParameter("new_price");
+        String[] purchaseData = request.getParameter("purchaseForDeleteOrEdit").split(";");
+        String newName = request.getParameter("new_purchase_name");
+        String newCount = request.getParameter("new_count");
+        String newPrice = request.getParameter("new_price");
 
         logger.info("DATA FOR UPDATE" + Arrays.toString(purchaseData) + newName + newName.length() + newCount + newPrice);
 
@@ -29,6 +26,6 @@ public class UpdateOnePurchaseHandler {
                 newName,
                 Integer.parseInt(newCount),
                 Double.parseDouble(newPrice),
-                req.getSession().getId());
+                request.getSession().getId());
     }
 }

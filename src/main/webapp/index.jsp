@@ -20,9 +20,8 @@
 <body>
 
 <a href="index.jsp" style="color: white">Главная страница</a>
-<form action="general-servlet" method="POST">
-    <input type="submit" value="Очистить весь список" class="border-button2" name="deleteAllLines"
-           style="float: right;">
+<form action="controller?action=deleteAllLines" method="POST">
+    <input type="submit" value="Очистить весь список" class="border-button2" style="float: right;">
 </form>
 <br>
 <br>
@@ -62,15 +61,20 @@
         </th>
 
         <th bgcolor="#333336">
-            <form action="general-servlet" method="POST">
-                <input type="submit" value="Изменить" class="border-button2" name="editOneLine">
-                <input type="submit" value="Удалить" class="border-button2" name="deleteOneLine">
+            <form action="controller?action=editOneLine" method="POST">
+                <input type="submit" value="Изменить" class="border-button2">
                 <input type="hidden" name="purchaseForDeleteOrEdit" value="
 <%= purchase.getId() + ";"  + purchase.getName() + ";" + purchase.getCount() + ";" + purchase.getPrice() %> ">
             </form>
-        </th>
-        <th bgcolor="#333336">
 
+        </th>
+
+        <th bgcolor="#333336">
+            <form action="controller?action=deleteOneLine" method="POST">
+                <input type="submit" value="Удалить" class="border-button2">
+                <input type="hidden" name="purchaseForDeleteOrEdit" value="
+<%= purchase.getId() + ";"  + purchase.getName() + ";" + purchase.getCount() + ";" + purchase.getPrice() %> ">
+            </form>
         </th>
 
     </tr>
@@ -127,16 +131,23 @@
 
 </table>
 
-<form action="general-servlet" method="POST">
-    <input type="submit" value="Скачать в .xlsx" class="border-button2" name="saveAsXlsx">
-    <input type="submit" value="Скачать в .pdf" class="border-button2" name="saveAsPdf">
+<%--<form action="controller?action=" method="POST">--%>
+<%--    <input type="submit" value="Скачать в .xlsx" class="border-button2" name="saveAsXlsx">--%>
+<%--    <input type="submit" value="Скачать в .pdf" class="border-button2" name="saveAsPdf">--%>
+<%--</form>--%>
+
+<form action="controller?action=saveAsXlsx" method="POST">
+    <input type="submit" value="Скачать в .xlsx" class="border-button2">
+</form>
+<form action="controller?action=saveAsPdf" method="POST">
+    <input type="submit" value="Скачать в .pdf" class="border-button2">
 </form>
 
-<br>
-<br>
-<br>
+<br><br><br>
+
 <h3>Добавьте свой товар: </h3>
-<form action="general-servlet" method="POST">
+
+<form action="controller?action=addOneLine" method="POST">
     Товар:
     <input type="text" name="purchase_name" class="input-field" required>
     Количество:
@@ -144,7 +155,7 @@
     Цена:
     <input type="number" name="price" class="input-field" required min="0" step="0.1">
     <br><br>
-    <input type="submit" value="Добавить в список" class="border-button" name="addOneLine">
+    <input type="submit" value="Добавить в список" class="border-button">
 </form>
 <br/>
 

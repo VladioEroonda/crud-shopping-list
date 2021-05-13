@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.*;
 import ru.eroonda.shoppinglist.dao.ShoppingListDao;
 import ru.eroonda.shoppinglist.entity.ShoppingList;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,7 +20,9 @@ public class PdfBuilder {
 
     private static final String[] headerCellNames = {"№", "Название товара", "Кол-во", "Цена за 1 шт", "Сумма"};
 
-    public static void build(ShoppingListDao dao, String sessionId, HttpServletResponse resp) {
+    public static void build(ShoppingListDao dao, HttpServletRequest request, HttpServletResponse response) {
+
+        String sessionId = request.getSession().getId();
 
         List<ShoppingList> allPurchases = dao.getAllPurchases(sessionId);
 
@@ -99,7 +102,7 @@ public class PdfBuilder {
 
             String genereatedFileName = nameGenerator(sessionId);
 
-            sendFileToUser(resp, byteArrayOutputStream, genereatedFileName);
+            sendFileToUser(response, byteArrayOutputStream, genereatedFileName);
 
         } catch (DocumentException | IOException e) {
             e.printStackTrace();
